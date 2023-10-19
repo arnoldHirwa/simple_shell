@@ -21,14 +21,15 @@ location *linked_dir()
 	{
 		perror("Can't initiate memory location of the head node");
 		kill(getpid(), SIGINT);
+		exit(1);
 	}
 
 	if (dir == NULL)
 	{
 		perror("Can't open the root directory\n");
 		kill(getpid(), SIGINT);
+		exit(1);
 	}
-
 	head->dir = dir;
 	head->path = env;
 	head->next = NULL;

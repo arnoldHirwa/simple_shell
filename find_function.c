@@ -26,7 +26,7 @@ int find_function(char *token, char *original)
 		}
 		else
 		{
-			exit(atoi(token));
+			exit(_atoi(token));
 		}
 		return (0);
 	}

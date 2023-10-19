@@ -18,12 +18,12 @@ char *_getenv(const char *name)
 
 	for (; environ[i]; i++)
 	{
-		env = strdup(environ[i]);
-		token = _strtok(env, "=");
+		env = _strdup(environ[i]);
+		token = strtok(env, "=");
 
 		if (_strcmp(name, token) == 0)
 		{
-			token = _strtok(NULL, "=");
+			token = strtok(NULL, "=");
 			return (token);
 		}
 		free(env);

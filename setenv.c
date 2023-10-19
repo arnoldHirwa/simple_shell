@@ -48,8 +48,8 @@ int _setenv(const char *name, const char *value, int overwrite)
 	for (i = 0; environ[i]; i++)
 	{
 		var = _strdup(environ[i]);
-		token = _strtok(var, "=");
-		if (token != NULL && strcmp((char *)name, (char *)token) == 0)
+		token = strtok(var, "=");
+		if (token != NULL && _strcmp((char *)name, (char *)token) == 0)
 		{
 			if (overwrite != 0)
 			{

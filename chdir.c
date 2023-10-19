@@ -11,7 +11,7 @@ int gohome(location *dirs)
 	char cwdir[1024] = "";
 	int changed;
 
-	if (strcmp(_getenv("PWD"), _getenv("HOME")) == 0)
+	if (_strcmp(_getenv("PWD"), _getenv("HOME")) == 0)
 	{
 		return (-1);
 	}
@@ -82,13 +82,13 @@ int goback(location *dirs, char *path)
 void _chdir(char *buf)
 {
 	char *sep = "\n ";
-	char *path = _strtok(buf, sep);
+	char *path = strtok(buf, sep);
 	static int num = 1;
 	int changed;
 	static location *dirs;
 	location *current = NULL;
 
-	path = _strtok(NULL, sep);
+	path = strtok(NULL, sep);
 	if (num == 1)
 	{
 		dirs = malloc(sizeof(location));

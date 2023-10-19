@@ -12,7 +12,7 @@ int _unsetenv(const char *name)
 	int i;
 	char *var, *token;
 
-	if (name == NULL || strchr(name, '=') != NULL)
+	if (name == NULL || _strchr((char *)name, '=') != NULL)
 	{
 		errno = EINVAL;
 		perror("unsetenv");
@@ -21,10 +21,10 @@ int _unsetenv(const char *name)
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		var = strdup(environ[i]);
+		var = _strdup(environ[i]);
 		token = strtok(var, "=");
 
-		if (token != NULL && strcmp(name, token) == 0)
+		if (token != NULL && _strcmp(name, token) == 0)
 		{
 			/* free(environ[i]); // Free the memory for the variable */
 			found = 1;

@@ -61,5 +61,7 @@ int _perro(char *c);
 char *_strstr(char *haystack, char *needle);
 int _bin(char *path, char **p, char *duplicate);
 int find_function(char *token, char *original);
+int _atoi(char *s);
+char *_strncpy(char *dest, char *src, int n);
 
 #endif /* ifndef MAIN_H */

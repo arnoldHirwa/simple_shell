@@ -27,7 +27,7 @@ int exec_command(char *original)
 		k = find_function(token, original);
 		if (k == 0)
 			return (0);
-		strcat(initial_path, token);
+		_strcat(initial_path, token);
 		path = initial_path;
 	} else
 		path = (token);

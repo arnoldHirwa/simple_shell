@@ -13,7 +13,7 @@ void handle_and_or_true(char *or, char *x, bool and)
 	int n, result;
 
 	compute = malloc(_strlen(or) - _strlen(x) + 2);
-	strncpy(compute, or, _strlen(or) - _strlen(x));
+	_strncpy(compute, or, _strlen(or) - _strlen(x));
 	result = exec_command(compute);
 
 	new_str = malloc(_strlen(x) - 1);

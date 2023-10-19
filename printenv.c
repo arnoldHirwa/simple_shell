@@ -9,7 +9,7 @@ void _printenv(void)
 
 	while (environ[i])
 	{
-		printf("%s\n", environ[i]);
+		/* printf("%s\n", environ[i]); */
 		i++;
 	}
 }

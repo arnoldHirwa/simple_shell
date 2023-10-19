@@ -29,7 +29,6 @@ int _bin(char *path, char **p, char *duplicate)
 		}
 		else
 		{
-			printf("k is: %d\n", k);
 			exit(0);
 		}
 	}

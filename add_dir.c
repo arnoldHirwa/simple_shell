@@ -33,7 +33,7 @@ void add_dir(location *link, char *path)
 		perror("malloc tmp");
 		return;
 	}
-	opened_dir = strdup(path);
+	opened_dir = _strdup(path);
 	tmp->dir = opendir(opened_dir);
 	if (tmp->dir == NULL)
 	{
