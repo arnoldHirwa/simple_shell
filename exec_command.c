@@ -13,15 +13,16 @@ int exec_command(char *original)
 	int i, k;
 	char sep[] = "\n ";
 
-	duplicate = strdup(original);
-	token = _strtok(duplicate, sep);
+
+	duplicate = _strdup(original);
+	token = strtok(duplicate, sep);
 	if (token == NULL)
 	{
 		free(duplicate);
 			return (-1);
 	}
-	path = malloc(strlen(token) + strlen(initial_path) + 1);
-	if (strchr(token, '/') == NULL)
+	path = malloc(_strlen(token) + _strlen(initial_path) + 1);
+	if (_strchr(token, '/') == NULL)
 	{
 		k = find_function(token, original);
 		if (k == 0)
@@ -30,7 +31,7 @@ int exec_command(char *original)
 		path = initial_path;
 	} else
 		path = (token);
-	p = malloc(sizeof(char *) * (strlen(original) + 1));
+	p = malloc(sizeof(char *) * (_strlen(original) + 1));
 	if (p == NULL)
 	{
 		perror("Memory allocation failed\n");
@@ -39,7 +40,7 @@ int exec_command(char *original)
 		return (-1);
 	}
 	p[0] = path;
-	for (i = 1; (token = _strtok(NULL, sep)) != NULL; i++)
+	for (i = 1; (token = strtok(NULL, sep)) != NULL; i++)
 	{
 		p[i] = token;
 	}

@@ -16,6 +16,7 @@
 #include <stdbool.h>
 
 #define min(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX_NUM_TOKENS 10
 
 /**
 * struct location - represents a directory location

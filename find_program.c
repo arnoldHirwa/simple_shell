@@ -4,13 +4,14 @@
 * find_program - Split and process a command buffer
 * @buf: The command buffer to process
 */
+
 void find_program(char *buf)
 {
 	char *tok, *dup;
 	char **arr;
-	int k, n;
+	int k, n, i;
 
-	arr = malloc(strlen(buf) + 1);
+	arr = malloc(MAX_NUM_TOKENS * sizeof(char *));
 	if (arr == NULL)
 	{
 		perror("Malloc arr");
@@ -23,7 +24,7 @@ void find_program(char *buf)
 		free(arr);
 		return;
 	}
-	tok = _strtok(dup, ";");
+	tok = strtok(dup, ";");
 	if (tok == NULL)
 	{
 		free(dup);
@@ -32,13 +33,17 @@ void find_program(char *buf)
 		return;
 	}
 	arr[0] = tok;
-	for (k = 1; (tok = _strtok(NULL, ";")) != NULL; k++)
+	for (k = 1; (tok = strtok(NULL, ";")) != NULL; k++)
 	{
 		arr[k] = tok;
 	}
 	for (n = 0; n < k; n++)
 	{
 		_operator(true, arr[n], true, false);
+	}
+	for (i = 0; i < k; i++)
+	{
+		free(arr[i]);
 	}
 	free(arr);
 }

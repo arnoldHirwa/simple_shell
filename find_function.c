@@ -18,7 +18,7 @@ int find_function(char *token, char *original)
 	}
 	else if (_strcmp(token, "exit") == 0)
 	{
-		token = _strtok(NULL, sep);
+		token = strtok(NULL, sep);
 		if (token == NULL)
 		{
 			kill(getppid(), SIGINT);
@@ -37,12 +37,12 @@ int find_function(char *token, char *original)
 	}
 	else if (_strcmp(token, "setenv") == 0)
 	{
-		_setenv(_strtok(NULL, sep), _strtok(NULL, sep), 1);
+		_setenv(strtok(NULL, sep), strtok(NULL, sep), 1);
 		return (0);
 	}
 	else if (_strcmp(token, "unsetenv") == 0)
 	{
-		_unsetenv(_strtok(NULL, sep));
+		_unsetenv(strtok(NULL, sep));
 		return (0);
 	}
 
