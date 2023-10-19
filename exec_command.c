@@ -12,7 +12,7 @@ int exec_command(char *original)
 	char initial_path[20] = "/bin/";
 	int i, k;
 	char sep[] = "\n ";
-
+	bool found;
 
 	duplicate = _strdup(original);
 	token = strtok(duplicate, sep);
@@ -41,10 +41,30 @@ int exec_command(char *original)
 	}
 	p[0] = path;
 	for (i = 1; (token = strtok(NULL, sep)) != NULL; i++)
-	{
 		p[i] = token;
-	}
 	p[i] = NULL;
+	found = file_exist(path);
+	if (found == true)
+		return (_bin(path, p, duplicate));
+	else
+		return (_perro("execve"));
+}
 
-	return (_bin(path, p, duplicate));
+
+/**
+* file_exist - check if the executable file exists
+* @path: path to the executable file
+*
+* Return: true on success, false on failure
+*/
+bool file_exist(char *path)
+{
+
+	struct stat file;
+
+	if (stat(path, &file) == 0)
+	{
+		return (true);
+	}
+	return (false);
 }
