@@ -4,7 +4,8 @@
 * handle_and_or_true - Handle AND or OR operations with true condition
 * @or: The original command string
 * @x: The logical operator and the following command
-* @and: If true, it's a logical AND operation; otherwise, it's a logical OR operation
+* @and: If true, it's a logical AND operation; otherwise,
+* it's a logical OR operation
 */
 void handle_and_or_true(char *or, char *x, bool and)
 {
@@ -49,16 +50,13 @@ void handle_and_or_true(char *or, char *x, bool and)
 
 void _operator(bool doIt, char *string, bool start, bool wasOr)
 {
-	char *new_str = NULL, *or;
-	char *x = _strstr(string, "&&");
-	char *y = _strstr(string, "||");
+	char *new_str = NULL, *or, *x = _strstr(string, "&&")
+	, *y = _strstr(string, "||");
 	int n;
-	unsigned long int w = (unsigned long int)x;
-	unsigned long int z = (unsigned long int)y;
+	unsigned long int w = (unsigned long int)x,	z = (unsigned long int)y;
 
-	if (((w < z) && w != 0) ||(w && z == 0))
+	if (((w < z) && w != 0) || (w && z == 0))
 	{
-
 		if (start == true || (doIt == true))
 		{
 			or = malloc(sizeof(string));
@@ -68,13 +66,10 @@ void _operator(bool doIt, char *string, bool start, bool wasOr)
 		{
 			new_str = malloc(_strlen(x));
 			for (n = 0; n < (_strlen(x) - 2); n++)
-			{
 				new_str[n] = x[n + 2];
-			}
 			new_str[n] = '\0';
-			_operator(wasOr? true : false, new_str, false, false);
+			_operator(wasOr ? true : false, new_str, false, false);
 		}
-
 	} else if (((z < w) && z != 0) || (z && w == 0))
 	{
 		if ((doIt == true) || start == true)
@@ -86,13 +81,10 @@ void _operator(bool doIt, char *string, bool start, bool wasOr)
 		{
 			new_str = malloc(_strlen(y));
 			for (n = 0; n < (_strlen(y) - 2); n++)
-			{
 				new_str[n] = y[n + 2];
-			}
 			new_str[n] = '\0';
-				_operator(wasOr? false : true, new_str, false, true);
+				_operator(wasOr ? false : true, new_str, false, true);
 		}
-
 	} else
 	{
 		if (doIt == true && wasOr == false)
