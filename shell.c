@@ -1,29 +1,43 @@
 #include "main.h"
 
 /**
- * main - Entry point
- *
- * Return: Always 0 (Success)
- */
+* main - Entry point
+*
+* Return: Always 0 (Success)
+*/
 int main(void)
 {
 	size_t len = 0;
+	char *buf = NULL;
 	int n;
-	char *buf;
+	int interactive = isatty(STDIN_FILENO);
 
 	signal(SIGINT, handle_signal);
 
 	while (1)
 	{
-		printf("{^_^} $ ");
-		fflush(stdout);
-		buf = malloc(1024);
-		n = _getline(&buf, &len, stdin);
+		if (interactive)
+		{
+			printf("{^_^} $ ");
+			fflush(stdout);
+		}
+
+		n = getline(&buf, &len, stdin);
+
+		if (n == -1)
+		{
+			free(buf);
+			break;
+		}
+
 		if (n > 0)
 		{
 			find_program(buf);
-			free(buf);
 		}
+
+		free(buf);
+		buf = NULL;
 	}
+
 	return (0);
 }
