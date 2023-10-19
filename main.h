@@ -13,17 +13,25 @@
 #include <dirent.h>
 #include <sys/dir.h>
 #include <errno.h>
+#include <stdbool.h>
 
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 
+/**
+* struct location - represents a directory location
+* @dir: pointer to a directory
+* @path: path to the directory
+* @next: pointer to the next location in a linked list
+*/
 typedef struct location
 {
-    DIR *dir;
-    char *path;
-    struct location *next;
+	DIR *dir;
+	char *path;
+	struct location *next;
 } location;
 
-extern char** environ;
+#define MAX_ALIASES 50
+extern char **environ;
 int _execve(const char *file, char *const *argv, char *const *env);
 size_t _getline(char **buf, size_t *len, FILE *source);
 char *_strtok(char *str, char *sep);
@@ -31,17 +39,22 @@ void handle_signal(int signum);
 void find_program(char *buf);
 int _which(int ac, char **av);
 char *_getenv(const char *name);
-int _strcmp(const char *s1,const char *s2);
+int _strcmp(const char *s1, const char *s2);
 char *_strcat(char *dest, char *src);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(const char *name);
 int _strlen(char *s);
-void _printenv();
+void _printenv(void);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char *_strncat(char *dest, char *src, int n);
 char *_strcpy(char *dest, char *src);
-location* linked_dir();
-void add_dir(location* link,char *path);
+location *linked_dir();
+void add_dir(location *link, char *path);
 void _chdir(char *buf);
+int exec_command(char *duplicate);
+void _operator(bool doIt, char *string, bool start, bool wasOr);
+char *_perror(char *c);
+char *_strdup(char *str);
+char *_strchr(char *s, char c);
 
-#endif /*ifndef MAIN_H*/
+#endif /* ifndef MAIN_H */

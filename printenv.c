@@ -1,10 +1,15 @@
 #include "main.h"
 
-void _printenv()
+/**
+ * _printenv - Print the environment variables
+ */
+void _printenv(void)
 {
-    int i = 0;
-    while(environ[i])
-    {
-        printf("%s\n", environ[i++]);
-    }
+	int i = 0;
+
+	while (environ[i])
+	{
+		printf("%s\n", environ[i]);
+		i++;
+	}
 }
