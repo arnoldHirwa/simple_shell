@@ -56,5 +56,8 @@ void _operator(bool doIt, char *string, bool start, bool wasOr);
 char *_perror(char *c);
 char *_strdup(char *str);
 char *_strchr(char *s, char c);
+int _perro(char *c);
+char *_strstr(char *haystack, char *needle);
+int _bin(char *path, char **p, char *duplicate);
 
 #endif /* ifndef MAIN_H */
