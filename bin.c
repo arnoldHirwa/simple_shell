@@ -10,8 +10,8 @@
 */
 int _bin(char *path, char **p, char *duplicate)
 {
-	char initial_path[20] = "/bin/";
-	int k, found;
+	char initial_path[100] = "/bin/";
+	int found;
 	pid_t child;
 	int status, exit_status;
 
@@ -27,8 +27,7 @@ int _bin(char *path, char **p, char *duplicate)
 		return (_perro("child process"));
 	else if (child == 0)
 	{
-		k = execve(path, p, environ);
-		if (k == -1)
+		if (execve(path, p, environ) == -1)
 		{
 			perror("execve");
 			exit(1);
@@ -38,8 +37,6 @@ int _bin(char *path, char **p, char *duplicate)
 	{
 		wait(&status);
 		free(duplicate);
-		free(p);
-		p = NULL;
 		_strcpy(initial_path, "/bin/");
 		if (WIFEXITED(status))
 		{

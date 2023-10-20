@@ -10,7 +10,7 @@ int exec_command(char *original)
 {
 	char *path, *duplicate, *token, **p, sep[] = "\n ";
 	char initial_path[20] = "/bin/";
-	int i, k;
+	int i, j, k;
 	bool found;
 
 	duplicate = _strdup(original);
@@ -21,6 +21,8 @@ int exec_command(char *original)
 			return (-1);
 	}
 	path = malloc(_strlen(token) + _strlen(initial_path) + 1);
+	if (path == NULL)
+		return (-1);
 	if (_strchr(token, '/') == NULL)
 	{
 		k = find_function(token, original);
@@ -33,7 +35,7 @@ int exec_command(char *original)
 		path = initial_path;
 	} else
 		path = (token);
-	p = malloc(sizeof(char *) * (_strlen(original) + 1));
+	p = malloc(sizeof(char *) * MAX_NUM_TOKENS + 1);
 	if (p == NULL)
 	{
 		free(duplicate);
@@ -45,7 +47,11 @@ int exec_command(char *original)
 		p[i] = token;
 	p[i] = NULL;
 
-	return (_bin(path, p, duplicate));
+	k = _bin(path, p, duplicate);
+
+	for (j = 0; j < i; j++)
+		free(p[i]);
+	return (k);
 }
 
 /**

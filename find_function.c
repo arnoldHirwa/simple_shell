@@ -21,8 +21,7 @@ int find_function(char *token, char *original)
 		token = strtok(NULL, sep);
 		if (token == NULL)
 		{
-			kill(getppid(), SIGINT);
-			kill(getpid(), SIGINT);
+			exit(0);
 		}
 		else
 		{
