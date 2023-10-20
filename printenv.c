@@ -9,7 +9,8 @@ void _printenv(void)
 
 	while (environ[i])
 	{
-		/* printf("%s\n", environ[i]); */
+		_printstr(environ[i]);
+		putchar('\n');
 		i++;
 	}
 }

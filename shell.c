@@ -18,7 +18,7 @@ int main(void)
 	{
 		if (interactive)
 		{
-			printf("{^_^} $ ");
+			_printstr("$ ");
 			fflush(stdout);
 		}
 

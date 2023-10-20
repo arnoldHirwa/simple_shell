@@ -11,12 +11,18 @@
 int _bin(char *path, char **p, char *duplicate)
 {
 	char initial_path[20] = "/bin/";
-	int k;
+	int k, found;
 	pid_t child;
 	int status, exit_status;
 
+	found = file_exist(path);
+	if (found == false)
+	{
+		_printstr(path);
+		_printstr(": not found\n");
+		return (-1);
+	}
 	child = fork();
-
 	if (child == -1)
 		return (_perro("child process"));
 	else if (child == 0)
@@ -24,12 +30,8 @@ int _bin(char *path, char **p, char *duplicate)
 		k = execve(path, p, environ);
 		if (k == -1)
 		{
-			perror("./shell");
-			exit(-1);
-		}
-		else
-		{
-			exit(0);
+			perror("execve");
+			exit(1);
 		}
 	}
 	else
@@ -44,8 +46,7 @@ int _bin(char *path, char **p, char *duplicate)
 			exit_status = WEXITSTATUS(status);
 			if (exit_status == 0)
 				return (1);
-			return (-1);
 		}
-		return (-1);
 	}
+	return (-1);
 }

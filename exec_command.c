@@ -8,10 +8,9 @@
 */
 int exec_command(char *original)
 {
-	char *path, *duplicate, *token, **p;
+	char *path, *duplicate, *token, **p, sep[] = "\n ";
 	char initial_path[20] = "/bin/";
 	int i, k;
-	char sep[] = "\n ";
 	bool found;
 
 	duplicate = _strdup(original);
@@ -28,28 +27,26 @@ int exec_command(char *original)
 		if (k == 0)
 			return (0);
 		_strcat(initial_path, token);
+		found = file_exist(initial_path);
+		if (found == false)
+			return (_perro("execve"));
 		path = initial_path;
 	} else
 		path = (token);
 	p = malloc(sizeof(char *) * (_strlen(original) + 1));
 	if (p == NULL)
 	{
-		perror("Memory allocation failed\n");
 		free(duplicate);
 		free(path);
-		return (-1);
-	}
+		return (_perro("malloc"));
+	};
 	p[0] = path;
 	for (i = 1; (token = strtok(NULL, sep)) != NULL; i++)
 		p[i] = token;
 	p[i] = NULL;
-	found = file_exist(path);
-	if (found == true)
-		return (_bin(path, p, duplicate));
-	else
-		return (_perro("execve"));
-}
 
+	return (_bin(path, p, duplicate));
+}
 
 /**
 * file_exist - check if the executable file exists
