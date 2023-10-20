@@ -32,7 +32,7 @@ int main(void)
 
 		if (n > 0)
 		{
-			find_program(buf);
+			exec_command(buf);
 		}
 
 		free(buf);
