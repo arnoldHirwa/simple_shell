@@ -1,2 +1,6 @@
 .vscode
-hsh
+SIMPLE_SHELL_TEST_SUITE
+TEST_SUITE
+allowed_functions
+runchecker.bash
+shell

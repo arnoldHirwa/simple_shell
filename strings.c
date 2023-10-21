@@ -1,124 +1,82 @@
 #include "main.h"
 
+/* $ */
+
 /**
- * _strlen - returns the length of a string
- * @s: string to evaluate
- *
- * Return: the length of the string
+ * _strlen - return len of string
+ * @s: the string counted
+ * Return: len of string
  */
+
 int _strlen(char *s)
 {
-	int i;
+	int i = 0;
 
-	i = 0;
-
-	while (s[i] != '\0')
+	if (!s)
+		return (0);
+	while (*s++)
 	{
 		i++;
 	}
-
 	return (i);
 }
 
 /**
- * *_strcpy - copies the string pointed to by src
- * including the terminating null byte (\0)
- * to the buffer pointed to by dest
- * @dest: pointer to the buffer in which we copy the string
- * @src: string to be copied
- *
- * Return: the pointer to dest
+ * _strcmp - compare two strings
+ * @s1: 1st string
+ * @s2: 2nd string
+ * Return: 0 if (s1 = 2), 1 if (s1 > s2), -1 if (s1 < s2)
  */
-char *_strcpy(char *dest, char *src)
+
+int _strcmp(char *s1, char *s2)
 {
-	int len, i;
-
-	len = 0;
-
-	while (src[len] != '\0')
+	while (*s1 && *s2)
 	{
-		len++;
-	}
+		if (*s1 != *s2)
+			return (*s1 - *s2);
 
-	for (i = 0; i < len; i++)
-	{
-		dest[i] = src[i];
+		s1++;
+		s2++;
 	}
-	dest[i] = '\0';
-
-	return (dest);
+	if (*s1 == *s2)
+		return (0);
+	else
+		return (*s1 < *s2 ? -1 : 1);
 }
 
 /**
- * _strcmp - Compare two strings
- * @s1: string
- * @s2: string
- * Return: negative int if s1 < s2, 0 if matching, and positive int if s1 > s2
+ * start_with - check if name is the same as the real env.
+ * @real_env: real env. value
+ * @name: env - name to find
+ * Return: addres of next character of haystack or NULL
  */
 
-int _strcmp(const char *s1, const char *s2)
+char *start_with(const char *real_env, const char *name)
 {
-	int i;
-
-	for (i = 0; s1[i] != '\0' || s2[i] != '\0'; i++)
+	while (*name) /*iterate through the string until all characters are equal*/
 	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
+		if (*name++ != *real_env++)
+			return (NULL);
 	}
-	return (0);
+	return ((char *)real_env);/*return the real string if successful*/
 }
 
 /**
- * _strcat - concatenate two strings
- * @dest: char string to concatenate to
- * @src: char string
- * Return: pointer to resulting string `dest`
+ * _strncat - concat twi string
+ * @dest: destination buffer
+ * @src: source buffer
+ * Return: pointer to desti buffer
  */
 
-char *_strcat(char *dest, char *src)
+char *_strncat(char *dest, char *src)
 {
-	int i, c;
+	char *ret = dest;
 
-	for (i = 0; dest[i] != '\0'; i++)
-		;
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
 
-	for (c = 0; src[c] != '\0'; c++)
-	{
-		dest[i] = src[c];
-		i++;
-	}
-
-	dest[i] = '\0';
-	return (dest);
+	*dest = *src;
+	return (ret);
 }
-
-
-
-/**
- * _strdup - Duplicate a string using malloc
- * @str: string to duplicate
- * Return: Pointer to a the new duped string
- */
-
-char *_strdup(char *str)
-{
-	char *a;
-	int i, c;
-
-	if (str == NULL)
-		return (NULL);
-
-	for (i = 0; str[i] != '\0'; i++)
-		;
-
-	a = malloc(i * sizeof(*a) + 1);
-	if (a == NULL)
-		return (NULL);
-
-	for (c = 0; c < i; c++)
-		a[c] = str[c];
-	a[c] = '\0';
-
-	return (a);
-}
-

@@ -1,73 +1,86 @@
 #include "main.h"
 
+/* $ */
+
 /**
-* exec_command - Execute a command
-* @original: The original command string
-*
-* Return: 1 on success, -1 on failure
-*/
-int exec_command(char *original)
+ * command_forkd - forks and execute process to run command
+ * @info: params & return info
+ * Return: void
+ */
+
+void command_forkd(info_t *info)
 {
-	char *path, *duplicate, *token, **p, sep[] = "\n ";
-	char initial_path[20] = "/bin/";
-	int i, j, k;
-	bool found;
+	pid_t child_pid;
 
-	duplicate = _strdup(original);
-	token = strtok(duplicate, sep);
-	if (token == NULL)
+	child_pid = fork();
+	if (child_pid == -1)
 	{
-		free(duplicate);
-			return (-1);
+		perror("Error:");
+		return;
 	}
-	path = malloc(_strlen(token) + _strlen(initial_path) + 1);
-	if (path == NULL)
-		return (-1);
-	if (_strchr(token, '/') == NULL)
+	if (child_pid == 0)
 	{
-		k = find_function(token, original);
-		if (k == 0)
-			return (0);
-		_strcat(initial_path, token);
-		found = file_exist(initial_path);
-		if (found == false)
-			return (_perro("execve"));
-		path = initial_path;
-	} else
-		path = (token);
-	p = malloc(sizeof(char *) * MAX_NUM_TOKENS + 1);
-	if (p == NULL)
+		if (execve(info->path, info->argv, env_return(info)) == -1)
+		{
+			data_free(info, 1);
+			if (errno == EACCES)
+				exit(126);
+			exit(1);
+		}
+	}
+	else
 	{
-		free(duplicate);
-		free(path);
-		return (_perro("malloc"));
-	};
-	p[0] = path;
-	for (i = 1; (token = strtok(NULL, sep)) != NULL; i++)
-		p[i] = token;
-	p[i] = NULL;
-
-	k = _bin(path, p, duplicate);
-
-	for (j = 0; j < i; j++)
-		free(p[i]);
-	return (k);
+		wait(&(info->status));
+		if (WIFEXITED(info->status))
+		{
+			info->status = WEXITSTATUS(info->status);
+			if (info->status == 126)
+				_errorput(info, "Permission denied\n");
+		}
+	}
 }
 
 /**
-* file_exist - check if the executable file exists
-* @path: path to the executable file
-*
-* Return: true on success, false on failure
-*/
-bool file_exist(char *path)
+ * command_find - find the command path
+ * @info: params & return info
+ * Return: void
+ */
+
+void command_find(info_t *info)
 {
+	char *path = NULL;
+	int i, k;
 
-	struct stat file;
-
-	if (stat(path, &file) == 0)
+	info->path = info->argv[0];
+	if (info->flag_lncount == 1)
 	{
-		return (true);
+		info->count_line++;
+		info->flag_lncount = 0;
 	}
-	return (false);
+	for (i = 0, k = 0; info->arg[i]; i++)
+	{
+		if (!delim_true(info->arg[i], " \t\n"))
+			k++;
+	}
+	if (!k)
+		return;
+	path = path_findh(info, _getenv(info, "PATH="), info->argv[0]);
+	if (path)
+	{
+		info->path = path;
+		command_forkd(info);
+	}
+	else
+	{
+		if ((interact(info) ||
+			 _getenv(info, "PATH=") ||
+			 info->argv[0][0] == '/') &&
+			command(info, info->argv[0]))
+			command_forkd(info);
+		else if (*(info->arg) != '\n')
+		{
+			info->status = 127;
+			_errorput(info, "not found\n");
+		}
+	}
 }

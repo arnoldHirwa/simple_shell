@@ -1,49 +1,82 @@
 #include "main.h"
 
 /**
-* find_function - Find and execute a built-in function
-* @token: The command token to check
-* @original: The original command string
-*
-* Return: 0 if a built-in function is executed, 1 otherwise
-*/
-int find_function(char *token, char *original)
+ * iterate_sh - allows shell to function continuously
+ * @info: A struct which contains all data we need
+ * @av: all arguments from main
+ * Return: 0 (Success), 1 (Error)
+ */
+
+int iterate_sh(info_t *info, char **av)
 {
-	char sep[] = "\n ";
+	ssize_t r = 0;
+	int inbuilt_ret = 0;
 
-	if (_strcmp(token, "cd") == 0)
+	while (r != -1 && inbuilt_ret != -2)
 	{
-		_chdir(original);
-		return (0);
-	}
-	else if (_strcmp(token, "exit") == 0)
-	{
-		token = strtok(NULL, sep);
-		if (token == NULL)
+		_dataclean(info); /*restart argc, argv, arg, and path to falsy values*/
+		if (interact(info))
+			put_str("$: "); /*print the prompt if we are in interactive mode*/
+		_putcharstdr(-1); /*flush the buffer to ensure the prompt is printed*/
+		r = _getinput(info); /*get command and update the args with obtained buf*/
+		if (r != -1) /*if it doesn't fail*/
 		{
-			exit(0);
+			data_set(info, av); /*ensure argv is readable by shell*/
+			inbuilt_ret = built_find(info); /*find specific buil in function*/
+			if (inbuilt_ret == -1) /*-1 is when inbuilt is not found*/
+				command_find(info);
 		}
-		else
+		else if (interact(info)) /*if we are in interactive mode after failure*/
 		{
-			exit(_atoi(token));
+			put_char('\n'); /*add new line*/
 		}
-		return (0);
+		data_free(info, 0); /*release the struct to avoid memory leaks*/
 	}
-	else if (_strcmp(token, "env") == 0)
+	hist_wrt(info); /*write the current state in history file*/
+	data_free(info, 1); /*release the struct to avoid memory leaks*/
+	if (!interact(info) && info->status)
+		exit(info->status); /*exit if we are not in interactive mode*/
+	if (inbuilt_ret == -2) /*-2 is for exit inbuilt*/
 	{
-		_printenv();
-		return (0);
+		if (info->num_err == -1)
+			exit(info->status); /*if there was an error, exit with current status*/
+		exit(info->num_err); /*otherwise exit with the current error*/
 	}
-	else if (_strcmp(token, "setenv") == 0)
-	{
-		_setenv(strtok(NULL, sep), strtok(NULL, sep), 1);
-		return (0);
-	}
-	else if (_strcmp(token, "unsetenv") == 0)
-	{
-		_unsetenv(strtok(NULL, sep));
-		return (0);
-	}
+	return (inbuilt_ret);
+}
 
-	return (1);
+/**
+ * built_find - find inbuilt command
+ * @info: params & return info
+ * Return: -1 if not found, 0 if execute success
+ * 1 if found and execute not success
+ * -2 if exit
+ */
+
+int built_find(info_t *info)
+{
+	int i, built_in_ret = -1;
+	inbuilt_table inbuilttbl[] = {
+		{"exit", exit_all},
+		{"env", _findenv},
+		{"help", find_help},
+		{"history", find_histor},
+		{"setenv", _setenviro},
+		{"unsetenv", un_setenviro},
+		{"cd", _chdi},
+		{"alias", find_alia},
+		{NULL, NULL}};
+
+	/*iterate through all built ins*/
+	for (i = 0; inbuilttbl[i].type; i++)
+	{
+		if (_strcmp(info->argv[0], inbuilttbl[i].type) == 0)
+		{
+			/*if one is found, call that particular function*/
+			info->count_line++; /*increment error count*/
+			built_in_ret = inbuilttbl[i].func(info);
+			break;
+		}
+	}
+	return (built_in_ret);
 }
